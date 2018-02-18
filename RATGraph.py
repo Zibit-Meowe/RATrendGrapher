@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib import style
 import matplotlib.dates as mdates
 from datetime import datetime
-import csv
+
 
 value_list = []
 
