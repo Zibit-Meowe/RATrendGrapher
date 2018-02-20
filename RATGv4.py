@@ -1,5 +1,4 @@
 import matplotlib
-
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.figure import Figure
@@ -8,7 +7,7 @@ import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 
 import tkinter as tk
-from tkinter import ttk, Tk, Menu
+from tkinter import ttk
 from tkinter.filedialog import askopenfilename as getname
 
 import numpy as np
@@ -22,6 +21,7 @@ from datetime import datetime
 
 Large_Font = ("Verdana", 12)
 
+style.use("ggplot")
 
 class ratgraph(tk.Tk):
 
@@ -81,7 +81,6 @@ class MainPage(tk.Frame):
         ToDateFmt = mdates.DateFormatter("%M:%S:%f")
 
         f = Figure(figsize=(8, 5), dpi=96)
-        plt.clf()
         a = f.add_subplot(111)
         a.xaxis.set_major_formatter(ToDateFmt)
         a.plot(x, y, label="Carriage Current Output")
@@ -103,10 +102,10 @@ class MainPage(tk.Frame):
         toolbar.update()
 
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        plt.close('all')
 
     def CloseGraph(self):
-
-        plt.clf("all")
+        self.plt.close("a")
 
 class PageOne(tk.Frame):
 
