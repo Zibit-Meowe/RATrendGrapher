@@ -54,6 +54,10 @@ class ratgraph(tk.Tk):
 
 class MainPage(tk.Frame):
 
+    CanClose = 0
+    f = Figure(figsize=(8, 5), dpi=96)
+    a = f.add_subplot(111)
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Main Page", font=Large_Font)
@@ -64,6 +68,8 @@ class MainPage(tk.Frame):
 
         button2 = ttk.Button(self, text="Close Graph", command=lambda: self.CloseGraph())
         button2.pack()
+
+        self.canvas = FigureCanvasTkAgg(self.f, self)
 
     def RetrFileName(self):
         fname = getname(initialdir="C:/Users/Zibit/Desktop/",
@@ -80,11 +86,9 @@ class MainPage(tk.Frame):
 
         ToDateFmt = mdates.DateFormatter("%M:%S:%f")
 
-        f = Figure(figsize=(8, 5), dpi=96)
-        a = f.add_subplot(111)
-        a.xaxis.set_major_formatter(ToDateFmt)
-        a.plot(x, y, label="Carriage Current Output")
-        plt.setp(a.get_xticklabels(), rotation=15)
+        self.a.xaxis.set_major_formatter(ToDateFmt)
+        self.a.plot(x, y, label="Carriage Current Output")
+        plt.setp(self.a.get_xticklabels(), rotation=15)
         '''
         
         plt.xlabel("Time")
@@ -94,18 +98,21 @@ class MainPage(tk.Frame):
         
         '''
 
-        canvas = FigureCanvasTkAgg(f, self)
-        canvas.show()
-        canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+        self.canvas.show()
+        self.canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
-        toolbar = NavigationToolbar2TkAgg(canvas, self)
+        toolbar = NavigationToolbar2TkAgg(self.canvas, self)
         toolbar.update()
 
-        canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-        plt.close('all')
+        self.canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+        self.CanClose = 1
 
     def CloseGraph(self):
-        self.plt.close("a")
+        if self.CanClose == 1:
+            self.canvas.get_tk_widget().delete("all")
+        else:
+            self.CanClose = 0
 
 class PageOne(tk.Frame):
 
