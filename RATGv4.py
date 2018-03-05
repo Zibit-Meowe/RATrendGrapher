@@ -55,8 +55,6 @@ class ratgraph(tk.Tk):
 class MainPage(tk.Frame):
 
     CanClose = 0
-    f = Figure(figsize=(8, 5), dpi=96)
-    a = f.add_subplot(111)
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -68,8 +66,6 @@ class MainPage(tk.Frame):
 
         button2 = ttk.Button(self, text="Close Graph", command=lambda: self.CloseGraph())
         button2.pack()
-
-        self.canvas = FigureCanvasTkAgg(self.f, self)
 
     def RetrFileName(self):
         fname = getname(initialdir="C:/Users/Zibit/Desktop/",
@@ -86,6 +82,8 @@ class MainPage(tk.Frame):
 
         ToDateFmt = mdates.DateFormatter("%M:%S:%f")
 
+        self.f = Figure(figsize=(8, 5), dpi=96)
+        self.a = self.f.add_subplot(111)
         self.a.xaxis.set_major_formatter(ToDateFmt)
         self.a.plot(x, y, label="Carriage Current Output")
         plt.setp(self.a.get_xticklabels(), rotation=15)
@@ -98,11 +96,12 @@ class MainPage(tk.Frame):
         
         '''
 
+        self.canvas = FigureCanvasTkAgg(self.f, self)
         self.canvas.show()
         self.canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
-        toolbar = NavigationToolbar2TkAgg(self.canvas, self)
-        toolbar.update()
+        self.toolbar = NavigationToolbar2TkAgg(self.canvas, self)
+        self.toolbar.update()
 
         self.canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
@@ -110,7 +109,8 @@ class MainPage(tk.Frame):
 
     def CloseGraph(self):
         if self.CanClose == 1:
-            self.canvas.get_tk_widget().delete("all")
+            self.canvas.get_tk_widget().destroy()
+            self.toolbar.destroy()
         else:
             self.CanClose = 0
 
